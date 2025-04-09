@@ -83,11 +83,29 @@ export default function Gallery() {
     if (!files) return;
 
     for (const file of files) {
-      await supabase.storage.from("gallery").upload(file.name, file, {
-        cacheControl: "3600",
-        upsert: true,
-      });
+      const uniqueName = `${Date.now()}-${file.name.replace(/\s+/g, "_")}`;
+      const filePath = `uploads/${uniqueName}`; // ✅ include folder if needed
+
+      try {
+        console.log("Uploading file:", file.name, file);
+
+        const blob = new Blob([file], { type: file.type });
+
+        const { data, error } = await supabase.storage.from("gallery").upload(filePath, blob, {
+          cacheControl: "3600",
+          upsert: true,
+        });
+
+        if (error) {
+          console.error(`Upload error for file ${file.name}:`, error?.message || error || "Unknown error");
+        } else {
+          console.log(`Successfully uploaded ${file.name}`, data);
+        }
+      } catch (err) {
+        console.error(`Unexpected error for file ${file.name}:`, err);
+      }
     }
+
     setPage(1);
     await fetchImages(1);
   };
