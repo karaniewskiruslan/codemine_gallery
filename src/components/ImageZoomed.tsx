@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Dialog, IconButton } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import HighlightOff from "@mui/icons-material/HighlightOff";
 import Close from "@mui/icons-material/Close";
 import { ImageType } from "codemine_task/types/Image";
+import Image from "next/image";
 
 type Props = {
   selected: ImageType | null;
@@ -28,21 +29,12 @@ const ImageZoomed = ({ selected, onClickUnselect, onClickDelete }: Props) => {
   return (
     <Dialog open={!!selected} onClose={exitModal} maxWidth="md">
       {selected && (
-        <div className="p-4 rounded-4xl relative">
+        <div className="p-4 rounded-4xl relative flex flex-col lg:gap-4 gap-2">
           <p className="text-center">{selected.name}</p>
           <div className="relative">
-            <img
-              src={selected.url}
-              alt={selected.name}
-              className="max-w-full max-h-[80vh] rounded-2xl"
-              onError={(e) => {
-                console.error("Failed to load zoomed image:", selected.url);
-                e.currentTarget.src = "/placeholder-image.png";
-                e.currentTarget.onerror = null; // Prevent infinite loop
-              }}
-            />
+            <img src={selected.url} alt={selected.name} className="max-w-full max-h-[75dvh] rounded-2xl" />
           </div>
-          <div className="flex justify-end mt-2">
+          <div className="flex justify-end">
             {!isDeleteClicked && (
               <IconButton color="error" onClick={() => setDeleteClicked(true)}>
                 <DeleteIcon />

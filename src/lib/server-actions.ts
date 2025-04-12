@@ -5,25 +5,13 @@ import { supabaseInit } from "./supabase";
 import { Data } from "codemine_task/types/data";
 import { ImageType } from "codemine_task/types/Image";
 
-// Define page size constant
-
-/**
- * Get public URLs for a list of files
- */
 export const getPublicImageUrls = async (files: { name: string }[]): Promise<ImageType[]> => {
   if (!files || files.length === 0) return [];
 
   try {
     const urls = await Promise.all(
       files.map(async (file) => {
-        // Log the file name for debugging
-        console.log("Processing file:", file.name);
-
-        // Get the public URL
         const { data: url } = await supabaseInit.storage.from("gallery").getPublicUrl(file.name);
-
-        // Log the generated URL for debugging
-        console.log("Generated URL:", url?.publicUrl);
 
         return {
           name: file.name,
@@ -38,16 +26,10 @@ export const getPublicImageUrls = async (files: { name: string }[]): Promise<Ima
   }
 };
 
-/**
- * Fetch images with pagination
- */
 export const fetchImages = async (page: number): Promise<Data> => {
   try {
     const from = (page - 1) * PAGE_SIZE;
 
-    console.log("Fetching images for page:", page, "with offset:", from);
-
-    // Fetch paginated data
     const { data, error } = await supabaseInit.storage.from("gallery").list("", {
       limit: PAGE_SIZE,
       offset: from,
@@ -61,7 +43,6 @@ export const fetchImages = async (page: number): Promise<Data> => {
 
     console.log("Fetched data:", data);
 
-    // Fetch all data for total count
     const { data: all, error: allError } = await supabaseInit.storage.from("gallery").list("", {
       limit: 10000,
       sortBy: { column: "created_at", order: "desc" },
@@ -72,14 +53,10 @@ export const fetchImages = async (page: number): Promise<Data> => {
       return { data: data ? await getPublicImageUrls(data) : [], total: [] };
     }
 
-    console.log("Fetched all data count:", all?.length || 0);
-
     if (!data || !all) return { data: [], total: [] };
 
     const publicUrls = await getPublicImageUrls(data);
     const publicUrlsAll = await getPublicImageUrls(all);
-
-    console.log("Generated public URLs count:", publicUrls.length);
 
     return { data: publicUrls, total: publicUrlsAll };
   } catch (error) {
@@ -88,9 +65,6 @@ export const fetchImages = async (page: number): Promise<Data> => {
   }
 };
 
-/**
- * Upload an image to storage
- */
 export async function uploadImage(formData: FormData) {
   try {
     const file = formData.get("file") as File;
@@ -128,9 +102,6 @@ export async function uploadImage(formData: FormData) {
   }
 }
 
-/**
- * Delete an image from storage
- */
 export async function deleteImage(name: string) {
   if (!name) {
     return { error: "No image name provided" };

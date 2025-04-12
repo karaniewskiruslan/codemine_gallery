@@ -13,7 +13,6 @@ import PaginationContainer from "codemine_task/components/Pagination";
 import { deleteImage, fetchImages, uploadImage } from "codemine_task/lib/server-actions";
 import { PAGE_SIZE } from "codemine_task/constant/constants";
 
-
 type Props = {
   initialData: Data;
 };
@@ -28,7 +27,6 @@ const ImageGallery = ({ initialData }: Props) => {
   const [total, setTotal] = useState<ImageType[]>(initialData.total || []);
   const loader = useRef<HTMLDivElement>(null);
 
-  // Function to refresh data
   const refreshData = useCallback(async () => {
     setIsFetching(true);
     try {
@@ -42,7 +40,6 @@ const ImageGallery = ({ initialData }: Props) => {
     }
   }, [page]);
 
-  // Handle file upload
   const handleUpload = useCallback(
     async (files: FileList) => {
       setIsLoading(true);
@@ -52,7 +49,6 @@ const ImageGallery = ({ initialData }: Props) => {
           formData.append("file", file);
           await uploadImage(formData);
         }
-        // Refresh data after upload
         setPage(1);
         await refreshData();
       } catch (error) {
@@ -64,7 +60,6 @@ const ImageGallery = ({ initialData }: Props) => {
     [refreshData, setPage]
   );
 
-  // Handle image deletion
   const handleDelete = useCallback(
     async (name: string) => {
       setIsLoading(true);
@@ -82,17 +77,14 @@ const ImageGallery = ({ initialData }: Props) => {
     [refreshData, setPage, setSelected]
   );
 
-  // Fetch data when page changes
   useEffect(() => {
     refreshData();
   }, [refreshData]);
 
-  // Scroll to top when page changes
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [page]);
 
-  // Infinite scroll functionality
   useEffect(() => {
     const el = loader.current;
     if (!el) return;
@@ -121,7 +113,8 @@ const ImageGallery = ({ initialData }: Props) => {
   return (
     <div id="root">
       <Header />
-      <main className="flex flex-col md:px-12 md:py-6 px-4 py-2 gap-6 relative">
+
+      <main className="flex flex-col lg:px-12 lg:py-6 px-4 py-2 gap-6 relative">
         <Gallery
           filtered={filtered}
           loader={loader}
@@ -137,9 +130,12 @@ const ImageGallery = ({ initialData }: Props) => {
             <CircularProgress size={24} />
           </div>
         )}
-        {pages !== 1 && <PaginationContainer page={page} pages={pages} setPage={setPage} />}
+
+        {!isFetching && pages !== 1 && <PaginationContainer page={page} pages={pages} setPage={setPage} />}
       </main>
+
       <Footer />
+
       <ImageZoomed
         selected={selected}
         onClickDelete={(name) => handleDelete(name)}

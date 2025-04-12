@@ -13,7 +13,11 @@ const Footer = () => {
         textAlign: "center",
       }}
     >
-      <a href="https://github.com/karaniewskiruslan" style={{ color: "inherit", textDecoration: "none" }}>
+      <a
+        href="https://github.com/karaniewskiruslan"
+        target="_blank"
+        style={{ color: "inherit", textDecoration: "none" }}
+      >
         This is a recruitment task for Codemine, made by Rusłan Karaniewski
       </a>
     </Box>

@@ -3,6 +3,7 @@ import { ImageType } from "codemine_task/types/Image";
 import React, { RefObject } from "react";
 import GalleryPhoto from "./GalleryPhoto";
 import { AnimatePresence, motion } from "framer-motion";
+import GalleryHeader from "./GalleryHeader";
 
 type Props = {
   filtered: ImageType[];
@@ -27,27 +28,15 @@ const cardVariants = {
 
 const Gallery = ({ filtered, onClickUpload, onClickSelect, onChangeSearch, loader }: Props) => {
   return (
-    <section className="flex flex-col gap-4">
-      <div className="flex gap-2 items-center justify-between">
-        <Button variant="contained" component="label">
-          Upload image
-          <input hidden multiple type="file" accept="image/png, image/jpeg, image/webp" onChange={onClickUpload} />
-        </Button>
-        <TextField
-          label="Search image"
-          variant="outlined"
-          size="small"
-          sx={{ width: "min(500px,30dvw)" }}
-          onChange={onChangeSearch}
-        />
-      </div>
+    <section className="flex flex-col lg:gap-4 gap-2">
+      <GalleryHeader onChangeSearch={onChangeSearch} onClickUpload={onClickUpload} />
 
       <AnimatePresence>
         <motion.ul
           variants={containerVariants}
           animate="show"
           initial="initial"
-          className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 gap-4 "
+          className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-4 "
         >
           {filtered.map((img) => (
             <motion.li
@@ -60,8 +49,6 @@ const Gallery = ({ filtered, onClickUpload, onClickSelect, onChangeSearch, loade
           ))}
         </motion.ul>
       </AnimatePresence>
-
-      {/* <div ref={loader} className="h-10" /> */}
     </section>
   );
 };
