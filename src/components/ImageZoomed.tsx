@@ -29,7 +29,7 @@ const ImageZoomed = ({ selected, onClickUnselect, onClickDelete }: Props) => {
   return (
     <Dialog open={!!selected} onClose={exitModal} maxWidth="md">
       {selected && (
-        <div className="p-4 rounded-4xl relative flex flex-col lg:gap-4 gap-2">
+        <div className="p-4 rounded-4xl relative flex flex-col xl:gap-4 gap-2">
           <p className="text-center">{selected.name}</p>
           <div className="relative">
             <img src={selected.url} alt={selected.name} className="max-w-full max-h-[75dvh] rounded-2xl" />

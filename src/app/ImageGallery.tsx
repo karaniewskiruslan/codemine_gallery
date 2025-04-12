@@ -114,7 +114,7 @@ const ImageGallery = ({ initialData }: Props) => {
     <div id="root">
       <Header />
 
-      <main className="flex flex-col lg:px-12 lg:py-6 px-4 py-2 gap-6 relative">
+      <main className="flex flex-col xl:px-12 xl:py-6 px-4 py-2 gap-6 relative">
         <Gallery
           filtered={filtered}
           loader={loader}

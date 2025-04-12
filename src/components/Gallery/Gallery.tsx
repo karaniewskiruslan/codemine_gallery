@@ -28,7 +28,7 @@ const cardVariants = {
 
 const Gallery = ({ filtered, onClickUpload, onClickSelect, onChangeSearch, loader }: Props) => {
   return (
-    <section className="flex flex-col lg:gap-4 gap-2">
+    <section className="flex flex-col xl:gap-4 gap-2">
       <GalleryHeader onChangeSearch={onChangeSearch} onClickUpload={onClickUpload} />
 
       <AnimatePresence>
@@ -36,7 +36,7 @@ const Gallery = ({ filtered, onClickUpload, onClickSelect, onChangeSearch, loade
           variants={containerVariants}
           animate="show"
           initial="initial"
-          className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-4 "
+          className="grid grid-cols-2 sm:grid-cols-4 xl:grid-cols-8 gap-4 "
         >
           {filtered.map((img) => (
             <motion.li
