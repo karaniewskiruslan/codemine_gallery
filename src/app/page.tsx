@@ -1,22 +1,9 @@
-import { supabaseInit } from "codemine_task/lib/supabase";
+import { fetchImages } from "codemine_task/lib/server-actions";
 import ImageGallery from "./ImageGallery";
 
-export default function Home() {
-  const setNewView = async () => {
-    const { data, error } = await supabaseInit.storage.from("gallery").list("photos", {
-      limit: 100,
-      sortBy: { column: "created_at", order: "desc" },
-    });
+export default async function Home() {
+  // Fetch initial data on the server
+  const initialData = await fetchImages(1);
 
-    if (data) console.log("Passed");
-    if (error) console.log("Error:", error);
-  };
-
-  setNewView();
-
-  return (
-    <>
-      <ImageGallery />
-    </>
-  );
+  return <ImageGallery initialData={initialData} />;
 }

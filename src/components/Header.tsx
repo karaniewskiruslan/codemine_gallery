@@ -7,7 +7,7 @@ const Header = (props: Props) => {
   return (
     <AppBar position="static">
       <Toolbar>
-        <Typography variant="h6">Image Gallery</Typography>
+        <Typography variant="h6">ImageType Gallery</Typography>
       </Toolbar>
     </AppBar>
   );

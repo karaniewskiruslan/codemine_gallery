@@ -1,13 +1,13 @@
-import { Button, Card, CardMedia, TextField } from "@mui/material";
-import { Image } from "codemine_task/types/Image";
+import { Button, TextField } from "@mui/material";
+import { ImageType } from "codemine_task/types/Image";
 import React, { RefObject } from "react";
 import GalleryPhoto from "./GalleryPhoto";
-import { delay, motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 
 type Props = {
-  filtered: Image[];
-  onClickUpload: (e: React.ChangeEvent<HTMLInputElement>) => Promise<void>;
-  onClickSelect: (img: Image | null) => void;
+  filtered: ImageType[];
+  onClickUpload: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onClickSelect: (img: ImageType | null) => void;
   onChangeSearch: (e: React.ChangeEvent<HTMLInputElement>) => void;
   loader: RefObject<HTMLDivElement | null>;
 };
@@ -15,9 +15,14 @@ type Props = {
 const containerVariants = {
   show: {
     transition: {
-      staggerChildren: 0.2,
+      staggerChildren: 0.05,
     },
   },
+};
+
+const cardVariants = {
+  initial: { opacity: 0 },
+  show: { opacity: 1 },
 };
 
 const Gallery = ({ filtered, onClickUpload, onClickSelect, onChangeSearch, loader }: Props) => {
@@ -37,19 +42,26 @@ const Gallery = ({ filtered, onClickUpload, onClickSelect, onChangeSearch, loade
         />
       </div>
 
-      <motion.div
-        variants={containerVariants}
-        animate="show"
-        initial="initial"
-        exit="exit"
-        className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 gap-4"
-      >
-        {filtered.map((img) => (
-          <GalleryPhoto key={img.name} image={img} onClickSelect={onClickSelect} />
-        ))}
-      </motion.div>
+      <AnimatePresence>
+        <motion.ul
+          variants={containerVariants}
+          animate="show"
+          initial="initial"
+          className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 gap-4 "
+        >
+          {filtered.map((img) => (
+            <motion.li
+              key={img.name}
+              variants={cardVariants}
+              className="hover:scale-105 transition-transform duration-300"
+            >
+              <GalleryPhoto image={img} onClickSelect={onClickSelect} />
+            </motion.li>
+          ))}
+        </motion.ul>
+      </AnimatePresence>
 
-      <div ref={loader} className="h-10" />
+      {/* <div ref={loader} className="h-10" /> */}
     </section>
   );
 };
